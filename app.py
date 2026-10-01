@@ -507,5 +507,6 @@ if not DEV_MODE and (ADMIN_KEY in ("", "change-me") or not VAPI_SECRET):
     raise SystemExit("Set a real ADMIN_KEY and VAPI_SECRET before running with DEV_MODE=0.")
 init_db()  # also runs under gunicorn on Render
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+import os
+port = int(os.environ.get("PORT", 5000))
+app.run(host="0.0.0.0", port=port)
