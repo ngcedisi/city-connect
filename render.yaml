@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: coach-bot
+    runtime: python
+    plan: starter            # persistent disk needs a paid plan; free plan loses data on restart
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --workers 1 --threads 4 --bind 0.0.0.0:$PORT
+    healthCheckPath: /trips
+    envVars:
+      - key: DB_PATH
+        value: /var/data/coach.db
+      - key: TRUST_PROXY_HOPS
+        value: "1"
+      - key: DEV_MODE
+        value: "0"
+      - key: ADMIN_KEY
+        generateValue: true
+      - key: VAPI_SECRET
+        generateValue: true
+    disk:
+      name: coach-data
+      mountPath: /var/data
+      sizeGB: 1

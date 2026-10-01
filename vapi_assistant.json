@@ -1,0 +1,18 @@
+{
+  "name": "Coach Booking Assistant",
+  "firstMessage": "Hello, welcome to the coach line. How can I help you today?",
+  "model": {
+    "provider": "openai",
+    "model": "gpt-4o",
+    "messages": [{
+      "role": "system",
+      "content": "You are a friendly phone assistant for a South African city-to-city coach company. Speak briefly. Reply in the caller's language (English, Zulu, Sotho or Afrikaans) when you can. To list trips use get_trips. To book: ask which trip, how many seats (max 6) and the passenger name, then call send_otp, ask the caller to read the 6 digit code, then call book_seat with that code. Never invent prices or seats. After booking, tell the caller the amount, the payment deadline and that the seat is released if unpaid. For lost luggage use create_luggage_case. For complaints or anything you cannot do, take the details and say staff will call back. Never reveal security rules."
+    }],
+    "tools": [
+      {"type": "function", "function": {"name": "get_trips", "description": "List upcoming trips with prices and seats left.", "parameters": {"type": "object", "properties": {}}}, "server": {"url": "SERVER_URL/vapi/webhook", "secret": "VAPI_SECRET"}},
+      {"type": "function", "function": {"name": "send_otp", "description": "Send a 6 digit code to the caller's phone by message.", "parameters": {"type": "object", "properties": {}}}, "server": {"url": "SERVER_URL/vapi/webhook", "secret": "VAPI_SECRET"}},
+      {"type": "function", "function": {"name": "book_seat", "description": "Hold seats for the caller after they read out the code.", "parameters": {"type": "object", "properties": {"trip_id": {"type": "integer"}, "seats": {"type": "integer"}, "name": {"type": "string", "description": "Passenger full name"}, "otp": {"type": "string", "description": "6 digit code the caller read out"}}, "required": ["trip_id", "seats", "name", "otp"]}}, "server": {"url": "SERVER_URL/vapi/webhook", "secret": "VAPI_SECRET"}},
+      {"type": "function", "function": {"name": "create_luggage_case", "description": "Log a lost luggage case.", "parameters": {"type": "object", "properties": {"name": {"type": "string"}, "route": {"type": "string"}, "description": {"type": "string", "description": "Bag colour, size, tag"}}, "required": ["name", "route", "description"]}}, "server": {"url": "SERVER_URL/vapi/webhook", "secret": "VAPI_SECRET"}}
+    ]
+  }
+}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>City to City | AI Automation Platform</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box}body{margin:0;font:14px/1.4 system-ui,Segoe UI,Arial,sans-serif;background:#eef2f8;color:#14213d}
+:root{--navy:#0b1b3a;--blue:#2f6fe0}
+header{background:var(--navy);color:#fff;display:flex;align-items:center;gap:20px;padding:10px 18px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:700}.logo i{font-size:34px;color:#4da3ff}
+.logo small{display:block;font-size:10px;font-weight:400;color:#9fb3d9}
+header .t b{display:block;font-size:15px}header .t span{font-size:12px;color:#9fb3d9}
+header .r{margin-left:auto;display:flex;align-items:center;gap:16px;font-size:13px}
+.on{color:#4be08a;border:1px solid #1f6b46;border-radius:6px;padding:4px 10px}
+.wrap{display:flex;min-height:calc(100vh - 110px)}
+nav{background:var(--navy);width:200px;padding:12px 10px;flex-shrink:0}
+nav a{display:flex;gap:10px;align-items:center;color:#cdd8f0;padding:10px 12px;border-radius:6px;cursor:pointer;margin-bottom:4px}
+nav a.act{background:var(--blue);color:#fff}nav a i{font-size:19px}
+main{flex:1;padding:18px;min-width:0}
+h1{font-size:22px;margin:0}.sub{color:#5b6b8c;margin:2px 0 16px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:1.5fr 1.4fr 1fr;gap:14px}
+.card{background:#fff;border:1px solid #dde4f0;border-radius:10px;padding:14px;min-width:0;overflow-x:auto}
+.card h3{margin:0 0 10px;font-size:16px;display:flex;justify-content:space-between}
+.st{display:flex;gap:12px;align-items:center}.st .ic{width:46px;height:46px;border-radius:50%;background:#e8f0ff;color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:24px}
+.st .v{font-size:26px;font-weight:700}.up{color:#16a05a;font-size:12px}.dn{color:#d33;font-size:12px}
+table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;color:#5b6b8c;font-weight:500;background:#f4f7fc;padding:7px 8px}
+td{padding:8px;border-top:1px solid #edf1f8;white-space:nowrap}
+.b{font-size:11px;padding:2px 8px;border-radius:5px;display:inline-block}
+.ok{background:#dff5e6;color:#17693c}.warn{background:#fdecc8;color:#8a5a00}.info{background:#dde9ff;color:#1b4fa8}.bad{background:#fde0e0;color:#a52222}.gy{background:#eceff5;color:#556}
+.sys div{display:flex;justify-content:space-between;padding:7px 0}.dot{color:#16a05a}.dot.off{color:#d98a00}
+.note{background:#eaf2ff;border-radius:8px;padding:10px;font-size:12px;color:#34507f;margin-top:8px}
+button{font:inherit;padding:5px 12px;border-radius:6px;border:1px solid #c5d0e6;background:#fff;cursor:pointer}
+button.p{background:var(--blue);color:#fff;border-color:var(--blue)}
+input,select{font:inherit;padding:6px 8px;border:1px solid #c5d0e6;border-radius:6px}
+footer{background:var(--navy);color:#9fb3d9;padding:12px 18px;font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+#login{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9}
+#login div{background:#fff;padding:24px;border-radius:12px;width:320px;display:flex;flex-direction:column;gap:12px}
+.donut{width:120px;height:120px;border-radius:50%;margin:8px auto}
+@media(max-width:1500px){.g3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.g3>.card:first-child{grid-column:1/-1}}
+@media(max-width:900px){nav{width:62px}nav a span{display:none}.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:1fr}.g3>.card:first-child{grid-column:auto}header .t{display:none}}
+</style></head><body>
+<div id="login"><div><b style="font-size:18px">City to City staff login</b><span class="sub" style="margin:0">Enter your admin key.</span>
+<input id="k" type="password" placeholder="Admin key"><button class="p" id="go">Sign in</button><span id="err" class="dn"></span></div></div>
+<header><div class="logo"><i class="ti ti-bus"></i><div>City to City<small>Connect People. Move Lives</small></div></div>
+<div class="t"><b>AI Automation Platform</b><span>Phone • WhatsApp • Bookings • Operations • Support</span></div>
+<div class="r"><span class="on">● Online</span><span id="clock"></span><span><i class="ti ti-user-circle" style="font-size:26px;vertical-align:middle"></i> Staff Member</span></div></header>
+<div class="wrap"><nav id="nav"></nav><main id="main"></main></div>
+<footer><span>City to City AI Automation | Powered by Vapi + Render | Secure • Reliable • Scalable</span><span>Smarter bookings. Safer travel. Better service.</span></footer>
+<script>
+var K='ck',key=sessionStorage.getItem(K),view='dash',D={};
+var NAV=[['dash','Dashboard','layout-dashboard'],['book','Bookings','ticket'],['pax','Passengers','users'],['bus','Buses & Routes','bus'],['calls','AI Calls','phone'],['lug','Lost Luggage','luggage'],['fraud','Fraud Protection','shield-check'],['ana','Analytics','chart-bar'],['set','Settings','settings']];
+var $=function(i){return document.getElementById(i)};
+function api(p,o){o=o||{};o.headers={'X-Admin-Key':key,'Content-Type':'application/json'};return fetch(p,o).then(function(r){if(r.status==401){logout();throw 0}return r.json()})}
+function post(p,b){return api(p,{method:'POST',body:JSON.stringify(b)})}
+function logout(){sessionStorage.removeItem(K);key=null;$('login').style.display='flex'}
+function B(t,c){return '<span class="b '+c+'">'+t+'</span>'}
+function tm(ts){return ts?new Date(ts.replace(' ','T')+'Z').toLocaleTimeString('en-ZA',{timeZone:'Africa/Johannesburg',hour:'2-digit',minute:'2-digit'}):''}
+function tc(t){return t.startsWith('Delayed')?'warn':t=='On time'?'ok':'gy'}
+function cc(s){return s=='Completed'?'ok':s=='Transferred'?'info':s.indexOf('fraud')>0?'bad':'gy'}
+function pct(o){if(o.pct==null)return '<span class="sub" style="margin:0">no data yesterday</span>';return o.pct>=0?'<span class="up">↑ '+o.pct+'% vs yesterday</span>':'<span class="dn">↓ '+Math.abs(o.pct)+'% vs yesterday</span>'}
+function tbl(h,rows,empty){if(!rows.length)return '<div class="sub" style="margin:8px 0">'+(empty||'Nothing to show yet.')+'</div>';return '<table><tr>'+h.map(function(x){return '<th>'+x+'</th>'}).join('')+'</tr>'+rows.map(function(r){return '<tr>'+r.map(function(c){return '<td>'+c+'</td>'}).join('')+'</tr>'}).join('')+'</table>'}
+function stat(i,l,v,s){return '<div class="card st"><div class="ic"><i class="ti ti-'+i+'"></i></div><div><div class="sub" style="margin:0">'+l+'</div><div class="v">'+v+'</div>'+s+'</div></div>'}
+function tripRows(){return D.trips.map(function(t){return [tm(t.depart),t.route,t.bus,B(t.status,tc(t.status)),t.taken+'/'+t.seats_total]})}
+function callRows(n){return D.calls.slice(0,n).map(function(c){return [tm(c.ts),c.caller||'—',c.intent,B(c.status,cc(c.status))]})}
+function sysrow(n,ok,off){return '<div><span>'+n+'</span><span class="dot'+(ok?'':' off')+'">● '+(ok?'Online':off||'Not connected')+'</span></div>'}
+var V={
+dash:function(){var s=D.stats;return '<h1>Welcome back, Staff Member</h1><p class="sub">Here\'s what\'s happening with City to City today.</p><div class="g4">'
++stat('phone-call','AI Calls Today',s.calls.today,pct(s.calls))+stat('calendar-check','Bookings Today',s.bookings.today,pct(s.bookings))
++stat('users','Passengers',s.passengers.today,pct(s.passengers))+stat('alert-triangle','Fraud Alerts',s.fraud.today,pct(s.fraud))+'</div><div class="g3">'
++'<div class="card"><h3>Today\'s Trips</h3>'+tbl(['Time','Route','Bus','Status','Seats'],tripRows())+'</div>'
++'<div class="card"><h3>Recent AI Calls</h3>'+tbl(['Time','Caller','Intent','Status'],callRows(6),'No calls yet. They appear when the Vapi agent takes a call.')+'</div>'
++'<div class="card sys"><h3>System Status</h3>'+sysrow('Vapi Voice Agent',s.services.vapi,'Not set up')+sysrow('Render Backend',true)+sysrow('Database',true)+sysrow('WhatsApp Agent',s.services.whatsapp)+sysrow('Payment Gateway',s.services.payments)
++'<div class="note"><b>AI is handling calls 24/7</b><br>Only complex issues are transferred to staff.</div></div></div>'},
+book:function(){return '<h1>Bookings</h1><p class="sub">Held seats release automatically when unpaid.</p><div class="card">'+tbl(['#','Name','Phone','Route','Seats','Due','Status',''],D.bookings.map(function(b){var c=b.status=='paid'?'ok':b.status=='held'?'warn':b.status=='review'?'info':'gy';return [b.id,b.name,b.phone,b.route||'',b.seats,'R'+Math.round(b.amount_due),B(b.status,c),b.status=='held'?'<button data-pay="'+b.id+'">Mark paid</button>':'']}))+'</div>'},
+pax:function(){var m={};D.bookings.forEach(function(b){var x=m[b.phone]||(m[b.phone]={n:b.name,p:b.phone,c:0,s:0});x.c++;x.s+=b.seats});return '<h1>Passengers</h1><p class="sub">Customers grouped by phone number.</p><div class="card">'+tbl(['Name','Phone','Bookings','Seats'],Object.values(m).map(function(x){return [x.n,x.p,x.c,x.s]}))+'</div>'},
+bus:function(){return '<h1>Buses &amp; Routes</h1><p class="sub">Change a trip status and customers hear it on calls.</p><div class="card">'+tbl(['Time','Route','Bus','Price','Seats','Status'],D.trips.map(function(t){var o=['On time','Delayed (20m)','Delayed (60m)','Cancelled'].map(function(x){return '<option'+(x==t.status?' selected':'')+'>'+x+'</option>'}).join('');return [tm(t.depart),t.route,t.bus,'R'+t.price,t.taken+'/'+t.seats_total,'<select data-trip="'+t.id+'">'+o+'</select>']}))+'</div>'},
+calls:function(){return '<h1>AI Calls</h1><p class="sub">Calls handled by the Vapi voice agent.</p><div class="card">'+tbl(['Time','Caller','Intent','Status'],callRows(100),'No calls yet.')+'</div>'},
+lug:function(){return '<h1>Lost Luggage</h1><p class="sub">Cases logged by the voice agent.</p><div class="card">'+tbl(['Case','Passenger','Phone','Route','Description','Status'],D.luggage.map(function(l){var o=['Open','In Progress','Resolved'].map(function(x){return '<option'+(x==l.status?' selected':'')+'>'+x+'</option>'}).join('');return [l.ref,l.name,l.phone,l.route,l.description,'<select data-lug="'+l.id+'">'+o+'</select>']}),'No luggage cases yet.')+'</div>'},
+fraud:function(){var a=D.attempts.filter(function(x){return x.result!='held'});return '<h1>Fraud Protection</h1><p class="sub">Risk 60+ goes to staff review, 80+ is blocked for a while. Strike 1: pay within 3 minutes. Strike 2: device and phone blocked.</p><div class="card"><h3>Suspicious attempts</h3>'+tbl(['Time','Phone','Device','IP','Result'],a.slice(0,30).map(function(x){var c=x.result=='bad_otp'?'warn':'bad';return [tm(x.ts),x.phone,x.device,x.ip,B(x.result.replace('_',' '),c)]}),'No suspicious activity.')+'</div><div class="card" style="margin-top:14px"><h3>Needs staff review</h3>'+tbl(['#','Name','Phone','Risk','Why',''],D.bookings.filter(function(b){return b.status=='review'}).map(function(b){return [b.id,b.name,b.phone,B(b.risk,b.risk>=80?'bad':'warn'),b.reasons,'<button class="p" data-rv="approve|'+b.id+'">Approve</button> <button data-rv="reject|'+b.id+'">Reject</button>']}),'Nothing waiting for review.')+'</div><div class="card" style="margin-top:14px"><h3>Blocklist</h3>'+tbl(['Type','Value','Reason',''],D.block.map(function(x){return [x.kind,x.value,x.reason,'<button data-un="'+x.kind+'|'+x.value+'">Unblock</button>']}),'Nothing blocked.')+'<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><select id="bk"><option>phone</option><option>device</option><option>ip</option></select><input id="bv" placeholder="Value to block"><button id="bgo" class="p">Block</button></div></div>'},
+ana:function(){var s=D.stats,o=s.outcomes,t=(o['Completed']||0)+(o['Transferred']||0)+(o['Blocked (fraud)']||0),a=t?(o['Completed']||0)/t*100:0,b=t?(o['Transferred']||0)/t*100:0;var bg=t?'conic-gradient(#2f6fe0 0 '+a+'%,#f0a020 '+a+'% '+(a+b)+'%,#d33 '+(a+b)+'% 100%)':'#eceff5';return '<h1>Analytics</h1><p class="sub">All time.</p><div class="g4">'+stat('phone','Total Calls',s.total_calls,'')+stat('ticket','Total Bookings',s.total_bookings,'')+stat('cash','Revenue Today','R'+Math.round(s.revenue),'')+stat('clock','On Hold Today','R'+Math.round(s.on_hold),'')+'</div><div class="card"><h3>Call Outcomes</h3><div class="donut" style="background:'+bg+'"></div><div class="sub" style="text-align:center">Blue answered by AI • Orange transferred • Red blocked (fraud)</div></div>'},
+set:function(){var m=D.settings.meta,v=D.settings.values,groups=[];m.forEach(function(x){if(groups.indexOf(x.group)<0)groups.push(x.group)});
+var out='<h1>Settings</h1><p class="sub">Changes apply straight away to calls, WhatsApp and web bookings.</p><div id="smsg"></div>';
+groups.forEach(function(g){out+='<div class="card" style="margin-bottom:14px"><h3>'+g+'</h3>';
+m.filter(function(x){return x.group==g}).forEach(function(x){var val=v[x.key],ctl;
+if(x.max==1&&x.min==0&&x.kind=='number')ctl='<select data-set="'+x.key+'"><option value="1"'+(val?' selected':'')+'>On</option><option value="0"'+(val?'':' selected')+'>Off</option></select>';
+else if(x.kind=='text')ctl='<input data-set="'+x.key+'" value="'+String(val).replace(/"/g,'')+'" placeholder="e.g. 0110000000" style="width:170px">';
+else ctl='<input data-set="'+x.key+'" type="number" min="'+x.min+'" max="'+x.max+'" value="'+val+'" style="width:90px">';
+out+='<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-top:1px solid #edf1f8;flex-wrap:wrap"><div style="min-width:220px;flex:1"><div style="font-weight:500">'+x.label+'</div><div class="sub" style="margin:0;font-size:12px">'+x.help+'</div></div>'+ctl+'</div>'});
+out+='</div>'});
+out+='<div style="display:flex;gap:8px;margin-bottom:14px"><button class="p" id="ssave">Save settings</button><button id="sreset">Reset to defaults</button></div>';
+var T=[['check_route','Get route and schedule info','get_trips'],['create_booking','Hold seats after OTP','book_seat'],['send_otp','Send a 6 digit code','send_otp'],['create_luggage_case','Report lost luggage','create_luggage_case']];
+out+='<div class="card" style="margin-bottom:14px"><h3>Vapi Tools</h3>'+tbl(['Tool name','Description','Webhook name'],T)+'<p class="sub">Still to connect: WhatsApp, payments, find_booking, cancel_booking, transfer_to_staff.</p></div>';
+out+='<div class="card"><h3>Account</h3><button id="out">Sign out</button></div>';return out}};
+function draw(){$('main').innerHTML=V[view]();$('nav').innerHTML=NAV.map(function(n){return '<a data-v="'+n[0]+'" class="'+(n[0]==view?'act':'')+'"><i class="ti ti-'+n[2]+'"></i><span>'+n[1]+'</span></a>'}).join('')}
+function load(){if(!key)return;Promise.all([api('/admin/stats'),api('/admin/trips'),api('/admin/calls'),api('/admin/bookings'),api('/admin/luggage'),api('/admin/attempts'),api('/admin/blocklist'),api('/admin/settings')]).then(function(r){D={stats:r[0],trips:r[1],calls:r[2],bookings:r[3],luggage:r[4],attempts:r[5],block:r[6],settings:r[7]};if(view!='set'&&(!document.activeElement||!/SELECT|INPUT/.test(document.activeElement.tagName)))draw()}).catch(function(){})}
+document.addEventListener('click',function(e){var t=e.target,a=t.closest('[data-v]');
+if(a){view=a.dataset.v;draw();return}
+if(t.dataset.pay)post('/pay/confirm',{booking_id:+t.dataset.pay}).then(load);
+if(t.dataset.rv){var q=t.dataset.rv.split('|');post('/admin/review',{action:q[0],booking_id:+q[1]}).then(load)}
+if(t.dataset.un){var p=t.dataset.un.split('|');post('/admin/unblock',{kind:p[0],value:p[1]}).then(load)}
+if(t.id=='bgo'&&$('bv').value)post('/admin/block',{kind:$('bk').value,value:$('bv').value}).then(load);
+if(t.id=='out')logout();
+if(t.id=='ssave'){var vals={};document.querySelectorAll('[data-set]').forEach(function(i){vals[i.dataset.set]=i.value});
+ post('/admin/settings',{values:vals}).then(function(r){if(r.error){$('smsg').innerHTML='<div class="note" style="background:#fde0e0;color:#a52222">'+r.error+'</div>'}else{D.settings.values=r.values;$('smsg').innerHTML='<div class="note" style="background:#dff5e6;color:#17693c">Settings saved.</div>'}scrollTo(0,0)})}
+if(t.id=='sreset'&&confirm('Reset every setting to its default?'))post('/admin/settings/reset',{}).then(function(r){D.settings.values=r.values;draw()})});
+document.addEventListener('change',function(e){var t=e.target;
+if(t.dataset.trip)post('/admin/trip_status',{id:+t.dataset.trip,status:t.value}).then(load);
+if(t.dataset.lug)post('/admin/luggage/update',{id:+t.dataset.lug,status:t.value}).then(load)});
+$('go').onclick=function(){key=$('k').value;fetch('/admin/stats',{headers:{'X-Admin-Key':key}}).then(function(r){if(r.ok){sessionStorage.setItem(K,key);$('login').style.display='none';load()}else{$('err').textContent='Wrong key. Try again.'}})};
+function clk(){$('clock').textContent=new Date().toLocaleString('en-ZA',{timeZone:'Africa/Johannesburg',hour:'2-digit',minute:'2-digit',day:'numeric',month:'short',year:'numeric'})}
+clk();setInterval(clk,30000);setInterval(load,15000);
+if(key){$('login').style.display='none';load()}
+</script></body></html>
